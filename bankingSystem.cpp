@@ -6,8 +6,19 @@ using namespace std;
 
 #define MIN_BALANCE 500
 
-class InsufficientFunds {};
-class AccountNotFound {};
+class InsufficientFunds {
+public:
+    static const string intialBalanceError;
+    static const string withdrawalError;
+};
+const string InsufficientFunds::intialBalanceError = "Initial balance must be at least the minimum balance requirement(500).";
+const string InsufficientFunds::withdrawalError = "Withdrawal doesn't uphold minimum balance requirement(500).";
+
+class AccountNotFound {
+public:
+    static const string errorMsg;
+};
+const string AccountNotFound::errorMsg = "Account not found.";
 
 class Account {
 private:
@@ -18,7 +29,7 @@ private:
     static long nextAccountNumber;
 
 public:
-    Account(){};
+    Account() {};
     Account(string fName, string lName, float balance);
     long getAccountNumber() { return accountNumber; }
     string getFirstName() { return firstName; }
@@ -54,13 +65,13 @@ int main() {
     Bank bank;
     Account account;
 
-    int userChoice;
+    int userChoice = 0;
     string fName, lName;
     long accountNumber;
     float balance;
     float amount;
     cout << "*** Welcome to the Banking System ***" << endl;
-    
+
     while (userChoice != 7) {
         cout << "\n\tPlease choose an option: ";
         cout << "\n\t1. Open an Account";
@@ -72,7 +83,7 @@ int main() {
         cout << "\n\t7. Exit";
         cout << "\nEnter your choice: ";
         cin >> userChoice;
-        
+
         switch (userChoice) {
             case 1:
                 cout << "Enter First Name: ";
@@ -86,7 +97,7 @@ int main() {
                     cout << endl << "Congratulations! Your account has been created." << endl;
                     cout << account;
                 } catch (InsufficientFunds) {
-                    cout << "Initial balance must be at least the minimum balance requirement." << endl;
+                    cout << InsufficientFunds::intialBalanceError << endl;
                 }
                 break;
 
@@ -98,7 +109,7 @@ int main() {
                     cout << endl << "Your Account Details:" << endl;
                     cout << account;
                 } catch (AccountNotFound) {
-                    cout << "Account not found." << endl;
+                    cout << AccountNotFound::errorMsg << endl;
                 }
                 break;
 
@@ -112,7 +123,7 @@ int main() {
                     cout << endl << "Amount Deposited Successfully" << endl;
                     cout << account;
                 } catch (AccountNotFound) {
-                    cout << "Account not found." << endl;
+                    cout << AccountNotFound::errorMsg << endl;
                 }
                 break;
 
@@ -126,9 +137,9 @@ int main() {
                     cout << endl << "Amount Withdrawn Successfully" << endl;
                     cout << account;
                 } catch (AccountNotFound) {
-                    cout << "Account not found." << endl;
+                    cout << AccountNotFound::errorMsg << endl;
                 } catch (InsufficientFunds) {
-                    cout << "Insufficient funds." << endl;
+                    cout << InsufficientFunds::withdrawalError << endl;
                 }
                 break;
 
@@ -139,7 +150,7 @@ int main() {
                     bank.deleteAccount(accountNumber);
                     cout << endl << "Account Closed Successfully" << endl;
                 } catch (AccountNotFound) {
-                    cout << "Account not found." << endl;
+                    cout << AccountNotFound::errorMsg << endl;
                 }
                 break;
 
@@ -148,7 +159,6 @@ int main() {
                 break;
 
             case 7:
-                // cout << "Exiting the system. Goodbye!" << endl;
                 break;
 
             default:
@@ -156,7 +166,7 @@ int main() {
                 break;
         }
     }
-    
+
     return 0;
 }
 
@@ -256,7 +266,7 @@ Account Bank::withdraw(long accountNumber, float amount) {
         try {
             itr->second.withdraw(amount);
             return itr->second;
-        } catch (const InsufficientFunds&) {
+        } catch (InsufficientFunds) {
             throw;
         }
     }
