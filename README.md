@@ -11,6 +11,6 @@ This project demonstrates object-oriented programming and file handling in C++. 
 - **User Interaction:** Provided a command-line interface (CLI) for users to interact with banking operations efficiently.
 
 ### Usage
-1. Compile `main.cpp`.
+1. Compile `bankingSystem.cpp`.
 2. Run the executable.
 3. Follow prompts to perform banking operations.
